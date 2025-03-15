@@ -7,4 +7,5 @@ pystray==0.19.4
 Pillow==10.0.1
 python-dotenv==1.0.0
 pywin32==306
-openai==1.1.1 
+openai==1.1.1
+beautifulsoup4==4.12.2 

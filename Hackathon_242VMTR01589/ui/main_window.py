@@ -48,11 +48,29 @@ class NovaUI(QMainWindow):
         # Start the assistant
         QTimer.singleShot(1000, self.assistant.start)
     
+    def get_icon_path(self, icon_name):
+        """Get the path to an icon file, with fallback for missing files."""
+        # Check if the icon exists in the assets directory
+        assets_dir = os.path.join(os.path.dirname(__file__), "assets")
+        icon_path = os.path.join(assets_dir, icon_name)
+        
+        # If the icon exists, return its path
+        if os.path.exists(icon_path):
+            return icon_path
+        
+        # If the icon doesn't exist, return None (which will use a default)
+        return None
+    
     def init_ui(self):
         """Initialize the user interface."""
         # Set window properties
         self.setWindowTitle("Nova AI Assistant")
-        self.setWindowIcon(QIcon(os.path.join(os.path.dirname(__file__), "assets", "nova_icon.png")))
+        
+        # Try to set the window icon
+        icon_path = self.get_icon_path("nova_icon.png")
+        if icon_path:
+            self.setWindowIcon(QIcon(icon_path))
+        
         self.setMinimumSize(600, 700)
         
         # Create central widget and layout
@@ -99,8 +117,17 @@ class NovaUI(QMainWindow):
         self.voice_button = QPushButton()
         self.voice_button.setFixedSize(50, 50)
         self.voice_button.setStyleSheet(self.styles.get_voice_button_style())
-        self.voice_button.setIcon(QIcon(os.path.join(os.path.dirname(__file__), "assets", "mic_icon.png")))
-        self.voice_button.setIconSize(QSize(30, 30))
+        
+        # Try to set the mic icon
+        mic_icon_path = self.get_icon_path("mic_icon.png")
+        if mic_icon_path:
+            self.voice_button.setIcon(QIcon(mic_icon_path))
+            self.voice_button.setIconSize(QSize(30, 30))
+        else:
+            # If no icon is available, use text instead
+            self.voice_button.setText("🎤")
+            self.voice_button.setFont(QFont("Segoe UI", 16))
+        
         self.voice_button.clicked.connect(self.toggle_voice_input)
         
         # Text input
@@ -134,7 +161,7 @@ class NovaUI(QMainWindow):
             "• 'Nova, open Chrome'\n"
             "• 'Nova, what time is it?'\n"
             "• 'Nova, show my IP address'\n"
-            "• 'Nova, shutdown my computer'"
+            "• 'Nova, search for prime minister of India'"
         )
         help_commands.setFont(QFont("Segoe UI", 10))
         

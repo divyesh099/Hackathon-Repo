@@ -13,6 +13,7 @@ from commands.app_commands import AppCommands
 from commands.system_commands import SystemCommands
 from commands.network_commands import NetworkCommands
 from commands.utility_commands import UtilityCommands
+from commands.search_commands import SearchCommands
 
 class CommandProcessor:
     """
@@ -28,7 +29,8 @@ class CommandProcessor:
             "app": AppCommands(assistant),
             "system": SystemCommands(assistant),
             "network": NetworkCommands(assistant),
-            "utility": UtilityCommands(assistant)
+            "utility": UtilityCommands(assistant),
+            "search": SearchCommands(assistant)
         }
         
         # Built-in commands handled directly by the processor
@@ -73,13 +75,17 @@ class CommandProcessor:
                 r"open\s+(control panel|task manager|file explorer)",
                 r"(show|list)\s+(running processes|cpu usage|memory usage)",
                 r"(set|adjust)\s+volume\s+(to|up|down|mute)"
+            ],
+            "search": [
+                r"search(\s+for)?\s+(?P<query>.*)",
+                r"google\s+(?P<query>.*)",
+                r"find(\s+information(\s+about|\s+on)?)?\s+(?P<query>.*)",
+                r"(who|what|where|when|why|how)(\s+is|\s+are|\s+was|\s+were|\s+do|\s+does|\s+did|\s+can|\s+could|\s+would|\s+should|\s+to).*"
             ]
         }
     
     def process(self, command_text):
-        """
-        Process a command and return a response.
-        """
+        """Process a command and return a response."""
         if not command_text:
             return "I didn't catch that. Can you please repeat?"
         
@@ -99,7 +105,6 @@ class CommandProcessor:
             return self.command_handlers[category].process(command_text, match)
         
         # If we can't categorize, try a more flexible approach
-        # Check for key phrases that might indicate the category
         if any(app_key in command_text.lower() for app_key in ["open", "launch", "start", "run"]):
             return self.command_handlers["app"].process(command_text, None)
             
@@ -112,14 +117,17 @@ class CommandProcessor:
         if any(util_key in command_text.lower() for util_key in ["control panel", "task manager", "file explorer", "processes", "volume"]):
             return self.command_handlers["utility"].process(command_text, None)
         
-        # If all else fails
-        return f"I'm not sure how to handle '{command_text}'. Try asking for help to see what I can do."
+        # Check if it might be a search query
+        if any(search_key in command_text.lower() for search_key in ["search", "google", "find", "who", "what", "where", "when", "why", "how"]):
+            return self.command_handlers["search"].process(command_text, None)
+        
+        # If it doesn't match any known command pattern, try treating it as a search query
+        return self.command_handlers["search"].process(command_text, None)
     
     def _remove_wake_word(self, command_text):
         """Remove the wake word from the beginning of the command."""
         wake_word = self.assistant.wake_word.lower()
         if command_text.lower().startswith(wake_word):
-            # Remove wake word and any following spaces/commas
             return re.sub(f"^{wake_word}[,\\s]*", "", command_text, flags=re.IGNORECASE).strip()
         return command_text
     
@@ -162,18 +170,18 @@ class CommandProcessor:
                 "- Shutdown my computer\n"
                 "- Turn off WiFi\n"
                 "- Show my IP address\n"
-                "- Open Task Manager")
+                "- Open Task Manager\n"
+                "- Search for the prime minister of India")
     
     def handle_who_are_you(self, command_text):
         """Handle identity questions."""
-        return ("I'm Nova, your personal AI assistant. I'm designed to help you "
-                "control your computer, open applications, and provide information through voice commands.")
+        return "I'm Nova, your personal AI assistant. I'm designed to help you control your computer, open applications, search the web, and provide information through voice commands."
     
     def handle_what_can_you_do(self, command_text):
         """Handle capability questions."""
         return ("I can help you with various tasks on your computer. I can open applications, "
                 "control system functions like shutdown or restart, manage network settings, "
-                "and open system utilities. Just tell me what you need!")
+                "open system utilities, and search the web for information. Just tell me what you need!")
     
     def handle_thank_you(self, command_text):
         """Handle thank you messages."""

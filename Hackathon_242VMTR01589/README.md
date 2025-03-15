@@ -10,6 +10,7 @@ Nova is an advanced AI-powered virtual assistant for Windows that responds to vo
 - 🔄 **System Control**: Handles system operations (shutdown, restart, lock)
 - 🌐 **Network Management**: Controls WiFi, Bluetooth, and displays network information
 - ⚙️ **System Utilities**: Quick access to Control Panel, Task Manager, etc.
+- 🔍 **Web Search**: Searches Google for information and provides answers
 - 🎨 **Modern UI**: Clean, intuitive interface with visual feedback
 - ✨ **Visual Cues**: Waving animation when wake word is detected
 
@@ -20,6 +21,9 @@ Nova is an advanced AI-powered virtual assistant for Windows that responds to vo
 - "Nova, turn off WiFi"
 - "Nova, show me my IP address"
 - "Nova, open Task Manager"
+- "Nova, search for the prime minister of India"
+- "Nova, who is Bill Gates?"
+- "Nova, what is the capital of France?"
 
 ## Wake Word Detection
 Nova responds to the following wake phrases:
@@ -29,8 +33,9 @@ Nova responds to the following wake phrases:
 - "Hello Nova"
 
 When Nova detects a wake word:
-1. Nova provides a brief verbal acknowledgment
-2. Nova then listens for your command
+1. A waving animation appears to confirm that Nova heard you
+2. Nova provides a brief verbal acknowledgment
+3. Nova then listens for your command
 
 You can also combine the wake word and command in a single phrase: "Nova, open Chrome"
 
@@ -52,14 +57,15 @@ You can also combine the wake word and command in a single phrase: "Nova, open C
 - SpeechRecognition for voice input
 - pyttsx3 for text-to-speech
 - PyQt5 for the user interface
+- Beautiful Soup for web page parsing
+- requests for HTTP requests
 - pywin32 for Windows system operations
 - Additional libraries for enhanced functionality
 
 ## Development
-Created by divyesh savaliya, for the PyHackathon competition.
-This project follows best practices in code organization, performance optimization, and user experience design.
+Created by divyesh savaliya, for the PyHackathon competition. This project follows best practices in code organization, performance optimization, and user experience design.
 
-# Start Generation Here
+# UI overview
 ![UI Screenshot](./ui/assets/main_ui.png)
 ![UI Screenshot](./ui/assets/listening_ui.png)
-# End Generation Here
+#
