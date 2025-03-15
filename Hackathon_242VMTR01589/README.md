@@ -58,3 +58,8 @@ You can also combine the wake word and command in a single phrase: "Nova, open C
 ## Development
 Created by divyesh savaliya, for the PyHackathon competition.
 This project follows best practices in code organization, performance optimization, and user experience design.
+
+# Start Generation Here
+![UI Screenshot](./ui/assets/main_ui.png)
+![UI Screenshot](./ui/assets/listening_ui.png)
+# End Generation Here
